@@ -6,6 +6,23 @@ Clone the repository with the following command:
 git clone --recurse-submodules https://github.com/sagikazarmark/curiefense-emissary-poc.git
 ```
 
+## Preparations
+
+Build container image:
+
+```shell
+docker build .
+```
+
+If you use Kind (proceed to the instructions below if you are here for the first time),
+you can build a local image and load into Kind:
+
+```shell
+docker build -t curiefense-emissary .
+kind load docker-image curiefense-emissary:latest
+```
+
+
 ## Setup
 
 Gain access to a Kubernetes cluster. Check out the [Using Kind](#using-kind) section for a local setup.
@@ -33,7 +50,8 @@ kubectl create namespace emissary
 kubectl apply -f curiefense/example-miniocfg.yaml
 
 cd curiefense/curiefense-helm/curiefense-helm
-DOCKER_TAG=v1.5.0 ./deploy.sh -f curiefense/use-minio.yaml --set "global.proxy.frontend=envoy"
+DOCKER_TAG=v1.5.0 ./deploy.sh -f curiefense/use-minio.yaml --set "global.proxy.frontend=envoy" --set "global.settings.curiefense_minio_insecure=true"
+cd -
 ```
 
 TODO: quality of life improvement: push (prod) chart to a chart repo? Use Kustomize to install components (uiserver, confserver) separately?
@@ -53,13 +71,18 @@ TODO: patch the deployment to use custom image.
 
 Patch the module to add Lua config:
 
+Patch the module to add Curiefense:
+
 ```shell
-kubectl -n emissary patch modules.getambassador.io ambassador --type merge --patch-file emissary/module-patch.yaml
+kubectl -n emissary patch modules.getambassador.io ambassador --type merge --patch-file emissary/patch-module.yaml
 ```
 
-TODO: patch the module to add Curiefense.
 
 TODO: add curieconf sidecar to Emissary pod?
+
+```shell
+kubectl -n emissary patch deployment emissary-ingress --type merge --patch-file emissary/patch-deployment.yaml
+```
 
 
 ## Usage
