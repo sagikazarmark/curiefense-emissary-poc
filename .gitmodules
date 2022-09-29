@@ -1,0 +1,3 @@
+[submodule "curiefense/curiefense-helm"]
+	path = curiefense/curiefense-helm
+	url = git@github.com:curiefense/curiefense-helm.git
