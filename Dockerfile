@@ -1,4 +1,4 @@
-FROM curiefense/curieproxy-envoy as curieproxy
+FROM curiefense/curieproxy-envoy:v1.5.0 as curieproxy
 
 FROM docker.io/emissaryingress/emissary:3.2.0
 
@@ -26,7 +26,8 @@ RUN luarocks install lrexlib-pcre2 && \
   luarocks install lua-resty-injection
 
 COPY --from=curieproxy /lua /lua
-COPY --from=curieproxy /usr/local/lib/lua/5.1/ /usr/local/lib/lua/5.1/
+COPY --from=curieproxy /usr/local/lib/lua/5.1/*.so /usr/local/lib/lua/5.1/
+RUN ln -s /usr/lib/libhs.so.5 /usr/local/lib/lua/5.1/libhs.so.5
 COPY --from=curieproxy /bootstrap-config/config /bootstrap-config/config
 
 RUN mkdir /config && chmod a+rwxt /config
