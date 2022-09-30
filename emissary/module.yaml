@@ -8,15 +8,10 @@ spec:
     lua_scripts: |
       local session = require "lua.session_envoy"
       function envoy_on_request(handle)
+        handle:headers():add("X-Lua-Added-Request-Header", "foo")
         session.inspect(handle)
       end
       function envoy_on_response(handle)
-        session.on_response(handle)
+        handle:headers():add("X-Lua-Added-Response-Header", "bar")
       end
-# function envoy_on_request(request_handle)
-  #   request_handle:headers():add("X-Lua-Added-Request-Header", "foo")
-# end
-
-# function envoy_on_response(response_handle)
-  #   response_handle:headers():add("X-Lua-Added-Response-Header", "bar")
-# end
+#session.on_response(handle)
