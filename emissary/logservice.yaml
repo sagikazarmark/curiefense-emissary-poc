@@ -1,0 +1,11 @@
+apiVersion: getambassador.io/v3alpha1
+kind: LogService
+metadata:
+  name: curielogger
+  namespace: emissary
+spec:
+  service: "curielogger.curiefense.svc.cluster.local:9001"
+  driver: http
+  driver_config: {}
+  grpc: true
+  protocol_version: v3
