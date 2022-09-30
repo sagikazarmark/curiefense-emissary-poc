@@ -36,4 +36,4 @@ RUN ln -s /usr/lib/libhs.so.5 /usr/glibc-compat/lib/libhs.so.5
 RUN ln -s /usr/lib/libhs.so.5 /usr/glibc-compat/lib/libhs.so.4
 COPY --from=curieproxy --chown=ambassador:root /bootstrap-config/config /bootstrap-config/config
 
-RUN mkdir /config && chmod a+rwxt /config && chown ambassador.root /config
+RUN mkdir /cf-config && chmod a+rwxt /cf-config && chown ambassador.root /cf-config

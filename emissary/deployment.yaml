@@ -11,8 +11,8 @@ spec:
           image: curiefense-emissary:latest
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - mountPath: /config
-              name: curieconf
+            - name: curieconf
+              mountPath: /cf-config
           ports:
           - containerPort: 8080
             name: http

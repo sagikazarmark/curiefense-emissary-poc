@@ -19,12 +19,12 @@
 # is currently used only for test_scout.py.  This is a BRUTAL HACK.
 
 # Curiefense init
-if [ ! -e /config/bootstrap ]; then
-	cp -va /bootstrap-config /config/bootstrap
+if [ ! -e /cf-config/bootstrap ]; then
+	cp -va /bootstrap-config /cf-config/bootstrap
 fi
 
-if [ ! -e /config/current ]; then
-	ln -s bootstrap /config/current
+if [ ! -e /cf-config/current ]; then
+	ln -s bootstrap /cf-config/current
 fi
 
 if [ "$1" != "--dev-magic" ]; then
