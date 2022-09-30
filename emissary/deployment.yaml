@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emissary-ingress
+  namespace: emissary
+spec:
+  template:
+    spec:
+      containers:
+        - name: ambassador
+          image: curiefense-emissary:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /config
+              name: curieconf
+          ports:
+          - containerPort: 8080
+            name: http
+          - containerPort: 8443
+            name: https
+          - containerPort: 8877
+            name: admin
+
+        - name: curiesync
+          image: curiefense/curiesync:fd4a73ce1d818124c74ec65948b12cb56711f25c
+          env:
+            - name: RUN_MODE
+              value: PERIODIC_SYNC
+            - name: CURIE_BUCKET_LINK
+              value: minio://curiefense-minio-bucket/prod/manifest.json
+            - name: CURIE_MINIO_HOST
+              value: minio.curiefense.svc.cluster.local:9000
+            - name: CURIE_MINIO_SECURE
+              value: "FALSE"
+            - name: CURIE_MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: CURIE_MINIO_SECRET_KEY
+              value: minioadmin
+          volumeMounts:
+            - name: curieconf
+              mountPath: /cf-config
+
+      volumes:
+        - name: curieconf
+          emptyDir: {}
