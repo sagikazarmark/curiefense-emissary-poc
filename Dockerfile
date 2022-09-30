@@ -25,10 +25,15 @@ RUN luarocks install lrexlib-pcre2 && \
   luarocks install luaipc && \
   luarocks install lua-resty-injection
 
-COPY --from=curieproxy /lua /lua
+#COPY --from=curieproxy /lua /lua
 COPY --from=curieproxy /lua /ambassador/lua
 COPY --from=curieproxy /usr/local/lib/lua/5.1/*.so /usr/local/lib/lua/5.1/
-RUN ln -s /usr/lib/libhs.so.5 /usr/local/lib/lua/5.1/libhs.so.5
-COPY --from=curieproxy /bootstrap-config/config /bootstrap-config/config
+# RUN ln -s /usr/lib/libhs.so.5 /usr/local/lib/lua/5.1/libhs.so.5
+# RUN ln -s /usr/lib/libhs.so.5 /usr/local/lib/lua/5.1/libhs.so.4
+# RUN ln -s /usr/lib/libhs.so.5 /usr/lib/libhs.so.4
+# RUN ln -s /usr/lib/libhs.so.5 /ambassador/lua/libhs.so.4
+RUN ln -s /usr/lib/libhs.so.5 /usr/glibc-compat/lib/libhs.so.5
+RUN ln -s /usr/lib/libhs.so.5 /usr/glibc-compat/lib/libhs.so.4
+COPY --from=curieproxy --chown=ambassador:root /bootstrap-config/config /bootstrap-config/config
 
-RUN mkdir /config && chmod a+rwxt /config
+RUN mkdir /config && chmod a+rwxt /config && chown ambassador.root /config

@@ -55,3 +55,25 @@ spec:
   hostname: host.example.com
   prefix: /
   service: foo-service:5678
+
+# Alternate host for testing Curiefense
+---
+apiVersion: getambassador.io/v3alpha1
+kind: Host
+metadata:
+  name: minimal-host2
+spec:
+  hostname: host2.example.com
+  requestPolicy:
+    insecure:
+      action: Route
+
+---
+apiVersion: getambassador.io/v3alpha1
+kind:  Mapping
+metadata:
+  name:  echo2
+spec:
+  hostname: host2.example.com
+  prefix: /
+  service: foo-service:5678
