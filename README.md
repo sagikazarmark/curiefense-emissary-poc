@@ -75,9 +75,43 @@ kubectl apply -f app/app.yaml
 
 ## Usage
 
-TODO
+First, you might want to create some configuration that proves the system works.
 
-On Mac, you probably have to use port forwards.
+For example, you could create a [Global Filter](https://docs.curiefense.io/settings/policies-rules/global-filters) that matches requests with a specific header (eg. `breakme: true`).
+
+Check out the [documentation](https://docs.curiefense.io/settings/policies-rules) to learn about the vast number of features Curiefense has.
+
+First, port-forward into the Curiefense UI server:
+
+```shell
+kubectl -n curiefense port-forward deploy/uiserver 8080:80
+```
+
+Then follow these steps to setup a simple deny rule:
+
+1. Go to _Policies & Rules_
+1. Choose _Global Filters_
+1. Click the + (plus) sign in the right upper corner
+1. Give the new filter a name
+1. Add a new match for a Header (eg. `breakme: true`)
+1. Choose _503 Service Unavailable_ as action
+1. Hit save (floppy icon)
+1. Go to _Publish Changes_
+1. Hit _Publish configuration_
+
+Next, port-forward into Emissary Ingress:
+
+```shell
+kubectl -n emissary port-forward deploy/emissary-ingress 8888:8080
+```
+
+Finally, send a request to the ingress:
+
+```shell
+curl -H "Host: host2.example.com" -H "breakme: true" localhost:8888
+```
+
+You should get an 503 from the server.
 
 
 ## Cleanup
