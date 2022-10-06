@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: ambassador
-          image: curiefense-emissary:latest
+          image: ghcr.io/sagikazarmark/curiefense-emissary-poc:latest
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: curieconf
